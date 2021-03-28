@@ -1,0 +1,36 @@
+18:51:04.191769445
+564f10e7a000-564f10e8d000 r-xp 00000000 08:14 78129133                   /home/akshaybavisk/work/gapbs/bc_st
+564f1108c000-564f1108d000 r--p 00012000 08:14 78129133                   /home/akshaybavisk/work/gapbs/bc_st
+564f1108d000-564f1108e000 rw-p 00013000 08:14 78129133                   /home/akshaybavisk/work/gapbs/bc_st
+564f11fa8000-564f11fdb000 rw-p 00000000 00:00 0                          [heap]
+7f45c49e6000-7f48e78f9000 rw-p 00000000 00:00 0 
+7f48eb4d5000-7f4904ec8000 rw-p 00000000 00:00 0 
+7f4904ec8000-7f49050af000 r-xp 00000000 08:02 262889                     /lib/x86_64-linux-gnu/libc-2.27.so
+7f49050af000-7f49052af000 ---p 001e7000 08:02 262889                     /lib/x86_64-linux-gnu/libc-2.27.so
+7f49052af000-7f49052b3000 r--p 001e7000 08:02 262889                     /lib/x86_64-linux-gnu/libc-2.27.so
+7f49052b3000-7f49052b5000 rw-p 001eb000 08:02 262889                     /lib/x86_64-linux-gnu/libc-2.27.so
+7f49052b5000-7f49052b9000 rw-p 00000000 00:00 0 
+7f49052b9000-7f49052d0000 r-xp 00000000 08:02 263075                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f49052d0000-7f49054cf000 ---p 00017000 08:02 263075                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f49054cf000-7f49054d0000 r--p 00016000 08:02 263075                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f49054d0000-7f49054d1000 rw-p 00017000 08:02 263075                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f49054d1000-7f490566e000 r-xp 00000000 08:02 274762                     /lib/x86_64-linux-gnu/libm-2.27.so
+7f490566e000-7f490586d000 ---p 0019d000 08:02 274762                     /lib/x86_64-linux-gnu/libm-2.27.so
+7f490586d000-7f490586e000 r--p 0019c000 08:02 274762                     /lib/x86_64-linux-gnu/libm-2.27.so
+7f490586e000-7f490586f000 rw-p 0019d000 08:02 274762                     /lib/x86_64-linux-gnu/libm-2.27.so
+7f490586f000-7f49059e8000 r-xp 00000000 08:02 3676453                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7f49059e8000-7f4905be8000 ---p 00179000 08:02 3676453                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7f4905be8000-7f4905bf2000 r--p 00179000 08:02 3676453                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7f4905bf2000-7f4905bf4000 rw-p 00183000 08:02 3676453                    /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25
+7f4905bf4000-7f4905bf8000 rw-p 00000000 00:00 0 
+7f4905bf8000-7f4905c21000 r-xp 00000000 08:02 262273                     /lib/x86_64-linux-gnu/ld-2.27.so
+7f4905e03000-7f4905e09000 rw-p 00000000 00:00 0 
+7f4905e21000-7f4905e22000 r--p 00029000 08:02 262273                     /lib/x86_64-linux-gnu/ld-2.27.so
+7f4905e22000-7f4905e23000 rw-p 0002a000 08:02 262273                     /lib/x86_64-linux-gnu/ld-2.27.so
+7f4905e23000-7f4905e24000 rw-p 00000000 00:00 0 
+7fff12da1000-7fff12dc2000 rw-p 00000000 00:00 0                          [stack]
+7fff12dd7000-7fff12dda000 r--p 00000000 00:00 0                          [vvar]
+7fff12dda000-7fff12ddc000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+VmPeak:	13829944 kB
+VmSize:	13589336 kB

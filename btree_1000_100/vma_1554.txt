@@ -1,0 +1,12 @@
+17:42:56.249162711
+00400000-00514000 r-xp 00000000 08:14 124784236                          /home/akshaybavisk/work/vmitosis-workloads/bin2/btree_1000_100
+00713000-0071a000 rw-p 00113000 08:14 124784236                          /home/akshaybavisk/work/vmitosis-workloads/bin2/btree_1000_100
+0071a000-00720000 rw-p 00000000 00:00 0 
+01ffb000-60586e000 rw-p 00000000 00:00 0                                 [heap]
+7f93f235a000-7faa67dcf000 rw-p 00000000 00:00 0 
+7ffd578c3000-7ffd578e4000 rw-p 00000000 00:00 0                          [stack]
+7ffd5797e000-7ffd57981000 r--p 00000000 00:00 0                          [vvar]
+7ffd57981000-7ffd57983000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+VmPeak:	119439372 kB
+VmSize:	119442464 kB
