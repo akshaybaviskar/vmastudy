@@ -25,6 +25,9 @@ vector<unsigned long int> startaddr_ul_2;
 vector<unsigned long int> endaddr_ul_2;
 
 
+int total_vma_updates = 0;
+int maxcount = 0;
+
 long avg_bloat = 0;
 long max_bloat = 0;
 
@@ -47,13 +50,13 @@ void insert_str(string a, int f)
 
 void increase_vmacounts(unsigned long);
 
-void print_2mb()
+void print_2mb(string fname)
 {
    unsigned int n = startaddr_ul_2.size();
 
    //	  cout<<"printing 2MB blocks"<<endl;
-   unsigned long ptes = 262143;
-   unsigned long int count;
+   unsigned long ptes = 262144;
+   unsigned long int count = 0;
    unsigned int count00 = 0;
    unsigned int count7f = 0;
    unsigned int count55 = 0;
@@ -61,13 +64,40 @@ void print_2mb()
    unsigned int countff = 0;
    unsigned int countot = 0;
    unsigned long int last_s = 0;
+   static int lastcount = 0;
+
+   vector<unsigned long int> startaddr_ul_3;
+   vector<unsigned long int> endaddr_ul_3;
+
+   unsigned long int lastend = -1;
    for(int i = 0;i<n;i++)
    {
-      unsigned long int s = startaddr_ul_2[i];
-      unsigned long int e = endaddr_ul_2[i];
+      unsigned long int s = startaddr_ul_2[i] & 0xfffffffffffc0000;
+      unsigned long int e = endaddr_ul_2[i] & 0xfffffffffffc0000;
 
-      count = e - s;
+      if(startaddr_ul_3.size() == 0)
+      {
+         startaddr_ul_3.push_back(s);
+      }
+      else if(s != lastend)
+      {
+         endaddr_ul_3.push_back(lastend);
+         startaddr_ul_3.push_back(s);
+      }
+      lastend = e;
+   }
+   endaddr_ul_3.push_back(lastend);
+
+   n = startaddr_ul_3.size();
+
+   for(int i = 0;i<n;i++)
+   {
+      long int s = startaddr_ul_3[i] & 0xfffffffffffc0000;
+      long int e = endaddr_ul_3[i] & 0xfffffffffffc0000;
+
+      count = abs(e - s);
       count = ceil((double)count/ptes);
+      count += 1;
 
       //cout<<hex<<setfill('0')<<setw(13)<<startaddr_ul_2[i]<<" - "<<setfill('0')<<setw(13)<<endaddr_ul_2[i]<<"  ("<<dec<<count<<")"<<endl;
       //cout<<ceil(double(s-last_s)/(256*1024))<<" GB"<<endl;
@@ -99,7 +129,18 @@ void print_2mb()
       }
       last_s = s;
    }
-   cout<<count00<<","<<count7f<<","<<count55<<","<<count56<<","<<countff<<","<<countot<<endl;
+   
+   count = count00 + count7f + count55 + count56 + countff + countot;
+   if(lastcount != count)
+   {
+      cout<<fname<<" : "<<count<<","<<count00<<","<<count7f<<","<<count55<<","<<count56<<","<<countff<<","<<countot<<endl;
+      lastcount = count;
+   }
+   if(count > maxcount)
+   {
+      total_vma_updates++;
+      maxcount = count;
+   }
    //  cout<<"total : "<<dec<<n<<endl;
 
    //  cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
@@ -145,6 +186,7 @@ void print_2mb()
 //string bms[25] = {"DA_master1", "DA_master2", "DA_slave01", "DA_slave02", "DA_slave11", "DA_slave12", "DCclient", "DCserver", "DSclient0", "DSclient1", "DSserver", "DSserverseed", "GraphAnalytics", "inmemory_analytics", "streamin_server_root", "str_server_wp1", "str_server_wp2", "str_server_wp3", "str_server_wp4" };
 
 string bms[10] = {"pr_twitter", "cc_twitter","bc_twitter", "pr_kron", "cc_kron", "cc_urand","tc_urandU", "bfs_urand", "canneal1", "btree_1000_100"};
+//string bms[1] = {"pr_twitter"};
 
 int main(int argc, char** argv)
 {
@@ -153,6 +195,8 @@ int main(int argc, char** argv)
 
    for(int i=0;i<10;i++)
    {
+      maxcount = 0;
+      total_vma_updates = 0;
       string fname = bms[i] + "/" + "vma_" + to_string(x) +".txt";
       //cout<<fname<<endl;
       cout<<bms[i]<<endl;
@@ -387,12 +431,13 @@ int main(int argc, char** argv)
 
          if(max_vma_count < (count - 3)) max_vma_count = count-3;
 
-         if(max_vmas_2mb < vmas_2mb)
+        // if(max_vmas_2mb < vmas_2mb)
          {
             max_vmas_2mb = vmas_2mb;
             startaddr_ul_2 = startaddr_ul;
             endaddr_ul_2 = endaddr_ul;
          }
+         print_2mb(fname);
 
          //	cout<<vmas_2mb<<"  "<<vmas_4mb<<"  "<<vmas_8mb<<"  "<<vmas_16mb<<endl;
 
@@ -414,7 +459,8 @@ int main(int argc, char** argv)
               cout<<i<<",";
               }
               cout<<endl;*/
-       print_2mb();
+       //print_2mb();
+         cout<<"total vma updates : "<<total_vma_updates<<endl;
    }
 
 
