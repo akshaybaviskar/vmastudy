@@ -28,6 +28,9 @@ vector<unsigned long int> endaddr_ul_2;
 int total_vma_updates = 0;
 int maxcount = 0;
 
+int max_radix_pt = 0;
+int max_twolevel_pt = 0;
+
 long avg_bloat = 0;
 long max_bloat = 0;
 
@@ -66,10 +69,46 @@ void print_2mb(string fname)
    unsigned long int last_s = 0;
    static int lastcount = 0;
 
+   vector<unsigned long int> startaddr_ul_4;
+   vector<unsigned long int> endaddr_ul_4;
+
+   unsigned long int lastend = -1;
+   for(int i = 0;i<n;i++)
+   {  
+      unsigned long int s = (startaddr_ul_2[i] & 0xffffffffffffff00) >>9;
+      unsigned long int e = (endaddr_ul_2[i] & 0xffffffffffffff00) >>9;
+      
+      if(startaddr_ul_4.size() == 0)
+      {
+         startaddr_ul_4.push_back(s);
+      }
+      else if(s != lastend)
+      {
+         endaddr_ul_4.push_back(lastend);
+         startaddr_ul_4.push_back(s);
+      }
+      lastend = e;
+   }
+   endaddr_ul_4.push_back(lastend);
+
+   n = startaddr_ul_4.size();
+   int radix_pt = 0;
+   for(int i = 0;i<n;i++)
+   {
+      long int s = startaddr_ul_4[i];
+      long int e = endaddr_ul_4[i];
+
+      count = abs(e - s);
+      count += 1;
+      radix_pt += count;
+   }
+
+
    vector<unsigned long int> startaddr_ul_3;
    vector<unsigned long int> endaddr_ul_3;
 
-   unsigned long int lastend = -1;
+   lastend = -1;
+   int twolevel_pt = 0;
    for(int i = 0;i<n;i++)
    {
       unsigned long int s = startaddr_ul_2[i] & 0xfffffffffffc0000;
@@ -141,6 +180,19 @@ void print_2mb(string fname)
       total_vma_updates++;
       maxcount = count;
    }
+
+   twolevel_pt = 512*4096*count;
+
+   radix_pt *= 4096;
+   unsigned long int  bloat = twolevel_pt - radix_pt;
+  // cout<<fname<<"4 kb pt : "<<radix_pt<<" 2lpt pt : "<<twolevel_pt<<" bloat : "<<bloat<<endl;
+      
+   avg_bloat += bloat;
+   if(bloat > max_bloat) max_bloat = bloat;
+
+   if(radix_pt > max_radix_pt) max_radix_pt = radix_pt;
+   if(twolevel_pt > max_twolevel_pt) max_twolevel_pt = twolevel_pt;
+   
    //  cout<<"total : "<<dec<<n<<endl;
 
    //  cout<<">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"<<endl;
@@ -195,11 +247,15 @@ int main(int argc, char** argv)
 
    for(int i=0;i<10;i++)
    {
+      max_bloat = 0;
+      avg_bloat = 0;
+      max_radix_pt = 0;
+      max_twolevel_pt = 0;
       maxcount = 0;
       total_vma_updates = 0;
       string fname = bms[i] + "/" + "vma_" + to_string(x) +".txt";
       //cout<<fname<<endl;
-      cout<<bms[i]<<endl;
+      //cout<<bms[i]<<endl;
       int x = 1;
       max_contig_reg = 0;
       max_contig_ps = 0;
@@ -460,12 +516,17 @@ int main(int argc, char** argv)
               }
               cout<<endl;*/
        //print_2mb();
+         avg_bloat = avg_bloat/x;
          cout<<"total vma updates : "<<total_vma_updates<<endl;
+
+         cout<<"Max Radix PT size = "<<(double)max_radix_pt/(1024*1024)<<" Mbytes."<<endl;
+         cout<<"Max Two Level PT size = "<<(double)max_twolevel_pt/(1024*1024)<<" Mbytes."<<endl;
+      //   cout<<"Max Two Dim Level PT size = "<<(double)2*max_twolevel_pt/(1024*1024)<<" Mbytes."<<endl;
+         cout<<"Max Bloat : "<<(double)max_bloat/(1024*1024)<<" Mbytes."<<endl;
+      //   cout<<"Avg Bloat : "<<(double)avg_bloat/(1024*1024)<<" Mbytes."<<endl;
+        // cout<<bms[i]<<","<<(double)max_radix_pt/(1024*1024)<<","<<(double)max_twolevel_pt/(1024*1024)<<","<<(double)2*max_twolevel_pt/(1024*1024)<<","<<(double)max_bloat/(1024*1024)<<","<<(double)avg_bloat/(1024*1024)<<endl;
    }
 
-
-   cout<<"Max Bloat : "<<max_bloat*8<<"bytes."<<endl;
-   cout<<"Avg Bloat : "<<avg_bloat*4/33<<"bytes."<<endl;
 
    return 1;
 }
